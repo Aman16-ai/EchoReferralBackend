@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from .models import UserProfile
+from .service.userService import UserService
 class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
@@ -25,7 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
 
             #init user profile
             if userobj is not None:
-                user_profile = UserProfile(base_user=userobj,headline="")
+                user_profile = UserProfile(user=userobj,headline="")
                 user_profile.save()
             
             return userobj
@@ -38,3 +39,18 @@ class UserSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        userService = UserService(instance)
+        progress = userService.getProfileCompletedProgress()
+        response['profile_progress'] = progress
+        print('user profile response to re',response['user'].pop('password'))
+        return response
+    class Meta:
+        model = UserProfile
+        fields = "__all__"

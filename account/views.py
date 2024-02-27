@@ -6,17 +6,18 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from .models import UserProfile
-from .serializer import UserSerializer,LoginSerializer
+from .serializer import UserSerializer,LoginSerializer,UserProfileSerializer
 from utils.tokenUtils import get_tokens_for_user
 from django.contrib.auth import authenticate
 from rest_framework.decorators import action
 from rest_framework import status
+from rest_framework.decorators import api_view,permission_classes
+from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    
 
     @action(detail=False,methods=['POST'])
     def login(self,request):
@@ -52,3 +53,15 @@ class UserViewSet(viewsets.ModelViewSet):
             'kwargs': getattr(self, 'kwargs', {}),
             'request': getattr(self, 'request', None)
         }
+    
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserDetails(request):
+    print("Running get user")
+    try:
+        serializer = UserProfileSerializer(UserProfile.objects.get(user=request.user),many=False)
+        return Response({"Response":serializer.data},status=status.HTTP_200_OK)
+    except Exception as e:
+        print(e)
+        return Response({"Error" : "something went wrong"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)

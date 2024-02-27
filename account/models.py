@@ -6,37 +6,52 @@ from orgranisation.models import Organisations
     
 class UserProfile(models.Model):
     id = models.AutoField(primary_key=True,auto_created=True)
-    base_user = models.OneToOneField(User,on_delete=models.CASCADE)
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
     headline = models.CharField(max_length=300)
     profile_completed = models.BooleanField(default=False)
 
+
+    def __str__(self) -> str:
+        return self.user.username
     def add_user_experience(self,data):
         experience = Experience(**data)
         experience.save()
         return experience
     
-    def get_all_experienceOfUser(self,data):
-        return Experience.objects.filter(user=self)
+    def get_all_experienceOfUser(self,countOnly):
+        data = Experience.objects.filter(userProfile=self)
+        print(data)
+        if countOnly:
+            return data.count()
+        return data
     
     def add_user_education(self, data):
         education = Education(**data)
         education.save()
         return education
 
-    def get_all_education_of_user(self):
-        return Education.objects.filter(user=self)
+    def get_all_education_of_user(self,countOnly):
+        data = Education.objects.filter(userProfile=self)
+        if countOnly:
+            return data.count()
+        return data
     
     def add_user_skill(self,data):
         skill = UserSkills(self,**data)
         skill.save()
         return skill
 
-    def get_user_skills(self):
-        return UserSkills.objects.filter(user=self)
+    def get_user_skills(self,countOnly):
+        data = UserSkills.objects.filter(userProfile=self)
+        if countOnly:
+            return data.count()
+        return data
+    
+    
 
 class Experience(models.Model):
     id = models.AutoField(primary_key=True,auto_created=True)
-    user = models.ForeignKey(UserProfile,on_delete= models.CASCADE)
+    userProfile = models.ForeignKey(UserProfile,on_delete= models.CASCADE)
     organisation = models.ForeignKey(Organisations, on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
@@ -49,7 +64,7 @@ class Experience(models.Model):
     
 class Education(models.Model):
     id = models.AutoField(primary_key=True,auto_created=True)
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    userProfile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     school = models.ForeignKey(Organisations, on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
@@ -57,7 +72,7 @@ class Education(models.Model):
     grade = models.CharField(max_length=10)
 
     def __str__(self):
-        return f"{self.user.username} - {self.course_name} at {self.school.name}"
+        return f"{self.userProfile.user.username} - {self.course_name} at {self.school.name}"
 
 
 class Skills(models.Model):
@@ -69,5 +84,5 @@ class Skills(models.Model):
     
 class UserSkills(models.Model):
     id = models.AutoField(primary_key=True,auto_created=True)
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    userProfile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     skill = models.ForeignKey(Skills,on_delete=models.CASCADE)
