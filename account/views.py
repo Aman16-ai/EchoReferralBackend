@@ -13,7 +13,8 @@ from rest_framework.decorators import action
 from rest_framework import status
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated
-from middleware.custom_permission import IsAdminOrOwner
+from middleware.custom_permission import IsAdminOrOwner,IsAdminOrUserProfileOwner
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -72,7 +73,16 @@ def getUserDetails(request):
 class UserExperienceModelViewSet(viewsets.ModelViewSet):
     queryset = Experience.objects.all()
     serializer_class = UserExperienceSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,IsAdminOrUserProfileOwner]
+
+    def get_queryset(self):
+        if not self.request.user.is_staff:
+            user_Profile = UserProfile.objects.get(user = self.request.user)
+            print(user_Profile)
+            return Experience.objects.filter(userProfile=user_Profile)
+           
+        return Experience.objects.all()
+    
     def finalize_response(self, request, response, *args, **kwargs):
         final_response = Response(status=response.status_code,data={"status":response.status_code,"Response":response.data})
         final_response.accepted_renderer = request.accepted_renderer

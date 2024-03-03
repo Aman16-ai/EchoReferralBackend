@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'orgranisation.apps.OrgranisationConfig',
     'account.apps.AccountConfig',
     "corsheaders",
+    "job.apps.JobConfig"
 ]
 
 MIDDLEWARE = [
