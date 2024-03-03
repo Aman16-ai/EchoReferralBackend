@@ -14,7 +14,7 @@ class UserProfile(models.Model):
     def __str__(self) -> str:
         return self.user.username
     def add_user_experience(self,data):
-        experience = Experience(**data)
+        experience = Experience(userProfile=self,**data)
         experience.save()
         return experience
     

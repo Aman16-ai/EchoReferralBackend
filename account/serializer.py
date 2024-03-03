@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from .models import UserProfile
+from .models import UserProfile,Experience
+from orgranisation.models import Organisations
 from .service.userService import UserService
 class UserSerializer(serializers.ModelSerializer):
     
@@ -54,3 +55,31 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = "__all__"
+
+
+
+class UserExperienceSerializer(serializers.ModelSerializer):
+    organisation = serializers.PrimaryKeyRelatedField(queryset=Organisations.objects.all())
+    class Meta:
+        exclude = ('userProfile',)
+        model = Experience
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        if self.context['request'].method == 'GET':
+            response['userProfile'] = UserProfileSerializer(instance.userProfile).data
+        return response
+    def create(self, validated_data):
+        try:
+            user= self.context['request'].user
+            userProfile = UserProfile.objects.get(user = user)
+            if userProfile is not None:
+                exp = userProfile.add_user_experience(data=validated_data)
+                return exp
+            raise ValidationError(detail={'Details':"User not found"})
+        except Exception as e:
+            print(e)
+            raise ValidationError(detail={'Details':"Something went wrong"})
+        
+
+# class GetUserExperienceSerializer()
