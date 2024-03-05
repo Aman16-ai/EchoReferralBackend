@@ -12,6 +12,7 @@ DisciplineType = (
 )
 class Job(models.Model):
     id = models.AutoField(primary_key=True,auto_created=True)
+    job_number = models.CharField(max_length=250,null=True,blank=True)
     post_date = models.DateField()
     title = models.CharField(max_length=150)
     organisation = models.ForeignKey(Organisations,on_delete=models.CASCADE)

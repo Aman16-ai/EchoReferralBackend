@@ -9,3 +9,10 @@ class JobModelSerializer(serializers.ModelSerializer):
         fields = "__all__"
         model = Job
         depth = 1
+
+class GetJobModelSerialzer(serializers.ModelSerializer):
+
+    class Meta:
+        fields = "__all__"
+        model = Job
+        depth = 1

@@ -1,15 +1,27 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Job
-from .serializers import JobModelSerializer
+from .serializers import JobModelSerializer,GetJobModelSerialzer
 from rest_framework.response import Response
 # Create your views here.
 class JobModelViewSet(viewsets.ModelViewSet):
     queryset = Job.objects.all()
-    serializer_class = JobModelSerializer
+    # serializer_class = JobModelSerializer
     # permission_classes = [IsAuthenticated] currently anyone can add a job in future we will add permission so thtat only organistaions can perform CURD on jobs
 
-    
+    serializers = {
+        'list': GetJobModelSerialzer,
+        'retrieve': GetJobModelSerialzer,
+        'create':JobModelSerializer
+    }
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return self.serializers['list']
+        elif self.action == 'retrieve':
+            return self.serializers['retrieve']
+        else:
+            return self.serializers['create']
     def finalize_response(self, request, response, *args, **kwargs):
         final_response = Response(status=response.status_code,data={"status":response.status_code,"Response":response.data})
         final_response.accepted_renderer = request.accepted_renderer
