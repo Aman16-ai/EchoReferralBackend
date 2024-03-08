@@ -172,3 +172,24 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+
+#CELERY SETTINGS
+# CELERY_BROKER_URL = "redis://localhost:6379/0"
+# # CELERY_RESULT_BACKEND = "django-db"
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_TIMEZONE = 'Asia/Kolkata'
+
+
+CELERY_BROKER_URL = "rediss://default:AVNS_3X_MO9rW8S9VmWC8796@redis-381bc3a7-asaxena7531-fba0.a.aivencloud.com:22275"
+# CELERY_RESULT_BACKEND = "django-db"
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kolkata'
+
+
+
+# celery -A EchoReferral.celery worker --pool=solo -l info
+# celery -A EchoReferral beat -l infoa
