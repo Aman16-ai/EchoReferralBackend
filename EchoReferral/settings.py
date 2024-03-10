@@ -191,5 +191,7 @@ CELERY_TIMEZONE = 'Asia/Kolkata'
 
 
 
+SERVER_TYPE = os.environ.get('SERVER_TYPE','DEV')
+
 # celery -A EchoReferral.celery worker --pool=solo -l info
 # celery -A EchoReferral beat -l infoa

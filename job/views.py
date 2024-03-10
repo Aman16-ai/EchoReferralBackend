@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view
 import docker
 import subprocess
 from .tasks import extract_and_add_skills
+from django.conf import settings
 # Create your views here.
 class JobModelViewSet(viewsets.ModelViewSet):
     queryset = Job.objects.all()
@@ -61,7 +62,12 @@ def testApi(request):
         #     print('output',stdout)
         # else:
         #     print('error ',stderr)
-        extract_and_add_skills.delay(text)
+        print(settings.SERVER_TYPE)
+        result = extract_and_add_skills.delay(job_id=9)
+        # if(settings.SERVER_TYPE != 'PROD'):
+        #     print('cannot excute celery')
+        # else:
+        #     print(result)
     except Exception as e:
         print(e)
     return Response({'message':"running test api"})

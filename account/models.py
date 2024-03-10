@@ -1,3 +1,4 @@
+from typing import Iterable
 from django.db import models
 from django.contrib.auth.models import User
 from orgranisation.models import Organisations
@@ -78,6 +79,11 @@ class Education(models.Model):
 class Skills(models.Model):
     id = models.AutoField(primary_key=True,auto_created=True)
     name = models.CharField(max_length=300)
+
+
+    def save(self,*args,**kwargs):
+        self.name = self.name.lower()
+        super(Skills,self).save(*args,**kwargs)
 
     def __str__(self) -> str:
         return self.name
