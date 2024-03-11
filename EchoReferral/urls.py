@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/organisation/",include("orgranisation.urls")),
     path("api/user/",include("account.urls")),
-    path("api/job/",include("job.urls"))
+    path("api/job/",include("job.urls")),
+    path("api/referral_request/",include("referral_request.urls"))
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

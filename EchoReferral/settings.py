@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'orgranisation.apps.OrgranisationConfig',
     'account.apps.AccountConfig',
     "corsheaders",
-    "job.apps.JobConfig"
+    "job.apps.JobConfig",
+    "referral_request.apps.ReferralRequestConfig"
 ]
 
 MIDDLEWARE = [

@@ -13,3 +13,10 @@ class IsAdminOrUserProfileOwner(permissions.BasePermission):
         if request.user.is_staff or request.method == 'GET':
             return True
         return obj.userProfile.user == request.user
+
+class IsAdminOrReferralRequestOwner(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        if request.user.is_staff or request.method == 'GET':
+            return True
+        return obj.candidate.user == request.user
