@@ -18,3 +18,11 @@ class ReferralRequestModelSerialzer(serializers.ModelSerializer):
         referralRequest = ReferralRequest(candidate = userProfile,**validated_data)
         referralRequest.save()
         return referralRequest
+
+
+class GetReferralRequestModelSerialzer(serializers.ModelSerializer):
+
+    class Meta:
+        fields = "__all__"
+        model = ReferralRequest
+        # depth = 1

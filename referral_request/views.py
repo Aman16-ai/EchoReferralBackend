@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .serializers import ReferralRequestModelSerialzer
+from .serializers import ReferralRequestModelSerialzer,GetReferralRequestModelSerialzer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
 from .models import ReferralRequest
@@ -12,7 +12,18 @@ class ReferralRequestModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated,IsAdminOrReferralRequestOwner]
     serializer_class = ReferralRequestModelSerialzer
 
+    serializers = {
+        'list' : GetReferralRequestModelSerialzer,
+        'create' : ReferralRequest,
+        'retrieve':GetReferralRequestModelSerialzer
+    }
 
+
+    def get_serializer_class(self):
+        if self.action == 'list' or self.action == 'retrieve':
+            return self.serializers['list']
+        return self.serializers['create']
+    
     def finalize_response(self, request, response, *args, **kwargs):
         final_response = Response(status=response.status_code,data={"status":response.status_code,"Response":response.data})
         final_response.accepted_renderer = request.accepted_renderer
