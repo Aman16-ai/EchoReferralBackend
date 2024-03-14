@@ -10,11 +10,11 @@ from middleware.custom_permission import IsAdminOrReferralRequestOwner
 class ReferralRequestModelViewSet(viewsets.ModelViewSet):
     queryset = ReferralRequest.objects.all()
     permission_classes = [IsAuthenticated,IsAdminOrReferralRequestOwner]
-    serializer_class = ReferralRequestModelSerialzer
+    # serializer_class = ReferralRequestModelSerialzer
 
     serializers = {
         'list' : GetReferralRequestModelSerialzer,
-        'create' : ReferralRequest,
+        'create' : ReferralRequestModelSerialzer,
         'retrieve':GetReferralRequestModelSerialzer
     }
 

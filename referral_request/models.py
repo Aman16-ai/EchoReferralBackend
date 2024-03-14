@@ -14,4 +14,4 @@ class ReferralRequest(models.Model):
     updated_at = models.DateField(auto_now=True)
 
     def __str__(self) -> str:
-        return self.candidate.user.username + " " + self.job.title + " at " + self.organistaion.name
+        return self.candidate.user.username + " " + self.job.title + " at " + self.organisation.name
