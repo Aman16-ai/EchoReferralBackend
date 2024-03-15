@@ -50,6 +50,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
         userService = UserService(instance)
         progress = userService.getProfileCompletedProgress()
         response['profile_progress'] = progress
+        currentOrgs = userService.getCurrentOrganisations()
+        if(currentOrgs == None):
+            response['curr_orgs'] = None
+        else :
+            exp_ser = GetUserExperienceSerializer(currentOrgs,many=True)
+            response['curr_orgs'] = exp_ser.data
         print('user profile response to re',response['user'].pop('password'))
         return response
     class Meta:
@@ -82,4 +88,8 @@ class UserExperienceSerializer(serializers.ModelSerializer):
             raise ValidationError(detail={'Details':"Something went wrong"})
         
 
-# class GetUserExperienceSerializer()
+class GetUserExperienceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        fields = "__all__"
+        model = Experience

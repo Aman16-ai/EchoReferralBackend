@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'account.apps.AccountConfig',
     "corsheaders",
     "job.apps.JobConfig",
-    "referral_request.apps.ReferralRequestConfig"
+    "referral_request.apps.ReferralRequestConfig",
 ]
 
 MIDDLEWARE = [

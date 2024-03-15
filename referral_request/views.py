@@ -5,13 +5,16 @@ from rest_framework import viewsets
 from .models import ReferralRequest
 from rest_framework.response import Response
 from middleware.custom_permission import IsAdminOrReferralRequestOwner
+from django_filters import rest_framework as filter
 # Create your views here.
 
 class ReferralRequestModelViewSet(viewsets.ModelViewSet):
     queryset = ReferralRequest.objects.all()
     permission_classes = [IsAuthenticated,IsAdminOrReferralRequestOwner]
+    filter_backends = (filter.DjangoFilterBackend,)
+    filterset_fields = ('organisation__name','organisation','job__id')
     # serializer_class = ReferralRequestModelSerialzer
-
+    
     serializers = {
         'list' : GetReferralRequestModelSerialzer,
         'create' : ReferralRequestModelSerialzer,

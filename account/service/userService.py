@@ -3,7 +3,7 @@ class UserService:
 
     def __init__(self,user) -> None:
         # self.user = user
-        self.userProfile = user
+        self.userProfile:UserProfile = user
 
     def getProfileCompletedProgress(self):
         exp_count = self.userProfile.get_all_experienceOfUser(countOnly=True)
@@ -22,3 +22,10 @@ class UserService:
         print(exp_count,edu_count,skills_count,headline_added)
         progress = ((exp_count + edu_count + skills_count + headline_added) / 4) * 100
         return progress
+    
+    def getCurrentOrganisations(self):
+        allExperiences = self.userProfile.get_all_experienceOfUser(countOnly=False)
+        if len(allExperiences) == 0:
+            return None
+        else : 
+            return allExperiences.filter(end_date=None)

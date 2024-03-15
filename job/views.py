@@ -8,12 +8,14 @@ import docker
 import subprocess
 from .tasks import extract_and_add_skills
 from django.conf import settings
+from django_filters import rest_framework as filter
 # Create your views here.
 class JobModelViewSet(viewsets.ModelViewSet):
     queryset = Job.objects.all()
     # serializer_class = JobModelSerializer
     # permission_classes = [IsAuthenticated] currently anyone can add a job in future we will add permission so thtat only organistaions can perform CURD on jobs
-
+    filter_backends = (filter.DjangoFilterBackend,)
+    filterset_fields = ('organisation__name','organisation__id')
     serializers = {
         'list': GetJobModelSerialzer,
         'retrieve': GetJobModelSerialzer,
