@@ -9,6 +9,8 @@ import subprocess
 from .tasks import extract_and_add_skills
 from django.conf import settings
 from django_filters import rest_framework as filter
+from rest_framework.decorators import action
+from .service.JobService import JobService
 # Create your views here.
 class JobModelViewSet(viewsets.ModelViewSet):
     queryset = Job.objects.all()
@@ -22,6 +24,14 @@ class JobModelViewSet(viewsets.ModelViewSet):
         'create':JobModelSerializer
     }
 
+    @action(methods=['GET'],detail=False)
+    def get_recent_jobs(self,request,pk=None):
+        js = JobService()
+        recent_jobs = js.recent_posted_jobs()
+        print(recent_jobs)
+        ser = self.serializers['list'](recent_jobs,many=True)
+        
+        return Response({'message':ser.data})
     def get_serializer_class(self):
         if self.action == 'list':
             return self.serializers['list']
