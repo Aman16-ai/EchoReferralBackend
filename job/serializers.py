@@ -13,6 +13,7 @@ class JobModelSerializer(serializers.ModelSerializer):
         depth = 1
 
     def create(self, validated_data):
+        # Migrate this code in Jobservice class
         job = Job(**validated_data)
         job.save()
 

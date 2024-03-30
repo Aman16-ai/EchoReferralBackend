@@ -6,6 +6,9 @@ from .models import ReferralRequest
 from rest_framework.response import Response
 from middleware.custom_permission import IsAdminOrReferralRequestOwner
 from django_filters import rest_framework as filter
+from rest_framework.decorators import action    
+from .service.ReferralRequestSerivce import ReferralRequestService
+from account.models import UserProfile
 # Create your views here.
 
 class ReferralRequestModelViewSet(viewsets.ModelViewSet):
@@ -21,6 +24,11 @@ class ReferralRequestModelViewSet(viewsets.ModelViewSet):
         'retrieve':GetReferralRequestModelSerialzer
     }
 
+    @action(methods=['GET'],detail=False)
+    def get_user_requests_status(self,request,pk=None):
+        user = request.user
+        allRequestsStatus = ReferralRequestService().user_requests_status(user=UserProfile.objects.get(user=user))
+        return Response(allRequestsStatus)
 
     def get_serializer_class(self):
         if self.action == 'list' or self.action == 'retrieve':
