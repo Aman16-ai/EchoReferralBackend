@@ -31,7 +31,7 @@ class JobModelViewSet(viewsets.ModelViewSet):
         print(recent_jobs)
         ser = self.serializers['list'](recent_jobs,many=True)
         
-        return Response({'message':ser.data})
+        return Response(ser.data)
     def get_serializer_class(self):
         if self.action == 'list':
             return self.serializers['list']
