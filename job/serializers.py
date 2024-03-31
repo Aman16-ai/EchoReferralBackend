@@ -4,6 +4,7 @@ from orgranisation.models import Organisations
 from .tasks import extract_and_add_skills
 from django.conf import settings
 from .service.JobService import JobService
+from utils.imageUtils import get_full_image_url
 class JobModelSerializer(serializers.ModelSerializer):
     organisation = serializers.PrimaryKeyRelatedField(queryset=Organisations.objects.all())
 

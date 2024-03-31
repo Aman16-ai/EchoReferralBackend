@@ -29,7 +29,7 @@ class JobModelViewSet(viewsets.ModelViewSet):
         js = JobService()
         recent_jobs = js.recent_posted_jobs()
         print(recent_jobs)
-        ser = self.serializers['list'](recent_jobs,many=True)
+        ser = self.serializers['list'](recent_jobs,many=True,context={'request': request})
         
         return Response(ser.data)
     def get_serializer_class(self):
