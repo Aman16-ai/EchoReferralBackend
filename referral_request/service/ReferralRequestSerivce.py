@@ -6,3 +6,4 @@ class ReferralRequestService():
     def user_requests_status(self,user:UserProfile):
         requests = ReferralRequest.objects.filter(candidate=user).values('status').annotate(count=Count('status'))
         return requests
+    

@@ -6,9 +6,10 @@ from .models import ReferralRequest
 from rest_framework.response import Response
 from middleware.custom_permission import IsAdminOrReferralRequestOwner
 from django_filters import rest_framework as filter
-from rest_framework.decorators import action    
+from rest_framework.decorators import action, api_view
 from .service.ReferralRequestSerivce import ReferralRequestService
 from account.models import UserProfile
+from .service.CandidateScoreService import CandidateScoreService
 # Create your views here.
 
 class ReferralRequestModelViewSet(viewsets.ModelViewSet):
@@ -56,3 +57,9 @@ class ReferralRequestModelViewSet(viewsets.ModelViewSet):
             'request': getattr(self, 'request', None)
         }
     
+
+@api_view(['GET'])
+def test(request):
+    # cs = CandidateScoreService()
+    # cs.get_score("noi noi")
+    return Response({"message":'noi noi'})
